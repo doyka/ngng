@@ -20,18 +20,17 @@ while True:
     for event in longpoll.listen():
         if event.type == VkBotEventType.MESSAGE_NEW:
             if event.object.peer_id != event.object.from_id:
-                print(event.object.peer_id)
                 try:
-                    if admin(vk, event.object.from_id, event.object.peer_id):
-                        if event.object.text.lower() == "нг":
-                            now = datetime.datetime.today() + datetime.timedelta(hours=3)
-                            NY = datetime.datetime(2020, 1, 1)
-                            d = NY - now
-                            mm, ss = divmod(d.seconds, 60)
-                            hh, mm = divmod(mm, 60)
-                            date = 'До нового года: {} дней {} часа {} мин {} сек.'.format(d.days, hh, mm, ss)
-                            vk.method("messages.send", {"peer_id": event.object.peer_id, "message": date,
-                                                        "random_id": 0, "attachment": 'photo-189648869_457239017'})
+                    scs = 2000000008
+                    if event.object.text.lower() == "нг" and admin(vk, event.object.from_id, event.object.peer_id) or event.object.peer_id == scs:
+                        now = datetime.datetime.today() + datetime.timedelta(hours=3)
+                        NY = datetime.datetime(2020, 1, 1)
+                        d = NY - now
+                        mm, ss = divmod(d.seconds, 60)
+                        hh, mm = divmod(mm, 60)
+                        date = 'До нового года: {} дней {} часа {} мин {} сек.'.format(d.days, hh, mm, ss)
+                        vk.method("messages.send", {"peer_id": event.object.peer_id, "message": date,
+                                                    "random_id": 0, "attachment": 'photo-189648869_457239017'})
                 except:
                     vk.method("messages.send", {"peer_id": event.object.peer_id, "message": 'Требуется выдать боту права администратора!',
                                                         "random_id": 0})
