@@ -20,6 +20,7 @@ while True:
     for event in longpoll.listen():
         if event.type == VkBotEventType.MESSAGE_NEW:
             if event.object.peer_id != event.object.from_id:
+                print(event.object.peer_id)
                 try:
                     if admin(vk, event.object.from_id, event.object.peer_id):
                         if event.object.text.lower() == "нг":
