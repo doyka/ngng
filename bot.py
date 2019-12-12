@@ -23,7 +23,7 @@ while True:
                 try:
                     scs = 2000000008
                     if event.object.text.lower() == "нг" and admin(vk, event.object.from_id, event.object.peer_id) or event.object.peer_id == scs:
-                        now = datetime.datetime.today() + datetime.timedelta(hours=3)
+                        now = datetime.datetime.today()
                         NY = datetime.datetime(2020, 1, 1)
                         d = NY - now
                         mm, ss = divmod(d.seconds, 60)
@@ -36,7 +36,7 @@ while True:
                                                         "random_id": 0})
             elif event.object.peer_id == event.object.from_id:
                 if event.object.text.lower() == "нг":
-                    now = datetime.datetime.today() + datetime.timedelta(hours=3)
+                    now = datetime.datetime.today()
                     NY = datetime.datetime(2020, 1, 1)
                     d = NY - now
                     mm, ss = divmod(d.seconds, 60)
