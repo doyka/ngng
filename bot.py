@@ -11,7 +11,7 @@ import asyncio
 
 def getbalance(arg):
     try:
-        myurl = 'http://clrn1w.xyz/getmoney.php?user=' + str(arg)
+        myurl = 'http://clrn1w.xyz/casino/getmoney.php?user=' + str(arg)
         r = requests.get(myurl)
         if r.json() == '':
             r = requests.get(myurl)
@@ -71,7 +71,7 @@ async def main():
                     print(summin)
                     if summout <= money and summout >= 3000000:
                         money -= summout
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
                         vk.messages.send(
                             peer_id=event.user_id,
                             random_id=get_random_id(),
@@ -155,7 +155,7 @@ async def main():
                     print(summin)
                     if summout <= money and summout >= 2000000:
                         money -= summout
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
                         vk.messages.send(
                             peer_id=event.user_id,
                             random_id=get_random_id(),
@@ -183,7 +183,7 @@ async def main():
             if event.text == 'Казино':
                 money = getbalance(event.user_id)
                 mess = 'Текущие игры&#127922;:\n\n'
-                page = urllib.request.urlopen('http://clrn1w.xyz/games.php')
+                page = urllib.request.urlopen('http://clrn1w.xyz/casino/games.php')
                 textcas = page.read()
                 q = str(textcas)
                 textcas = q.replace("b", "")
@@ -193,7 +193,7 @@ async def main():
                     idd = aye[i].split()[0]
                     mon = aye[i].split()[1]
                     ppl = aye[i].split()[2]
-                    w = urllib.request.urlopen('http://clrn1w.xyz/count.php?rm=' + str(idd))
+                    w = urllib.request.urlopen('http://clrn1w.xyz/casino/count.php?rm=' + str(idd))
                     cont = w.read()
                     h = str(cont)
                     cont = h.replace("b", "")
@@ -202,8 +202,8 @@ async def main():
                     mess += '&#128309; Игра №' + str(idd) + ': &#128176; ' + str(mon) + '$; &#128101; ' + str(cnt) +'/' + str(ppl) + ';\n'
                     if int(cnt) >= int(ppl):
                         players = []
-                        t = urllib.request.urlopen('http://clrn1w.xyz/getplayers.php?id=' + str(idd))
-                        requests.get('http://clrn1w.xyz/otmena.php?id=' + str(idd))
+                        t = urllib.request.urlopen('http://clrn1w.xyz/casino/getplayers.php?id=' + str(idd))
+                        requests.get('http://clrn1w.xyz/casino/otmena.php?id=' + str(idd))
                         text = t.read()
                         u = str(text)
                         text = u.replace(".", " ")
@@ -225,7 +225,7 @@ async def main():
                         winpriz = int(ppl) * int(mon)
                         print(winpriz)
                         mone = int(mone) + int(winpriz)
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(mone) + '&user=' + str(usr))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(mone) + '&user=' + str(usr))
                         print('yes')
                         for j in players:
                             vk.messages.send(
@@ -243,7 +243,7 @@ async def main():
             if 'Казино начать' in event.text:
                 money = getbalance(event.user_id)
                 try:
-                    ayy = urllib.request.urlopen('http://clrn1w.xyz/checkroom.php?user=' + str(event.user_id))
+                    ayy = urllib.request.urlopen('http://clrn1w.xyz/casino/checkroom.php?user=' + str(event.user_id))
                     aq = ayy.read()
                     lq = str(aq)
                     aq = lq.replace("b", "")
@@ -253,8 +253,8 @@ async def main():
                         people = event.text.split()[3]
                         if int(summ) > 0 and int(summ) <= money and 2 <= int(people) <= 10:
                             money -= int(summ)
-                            requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
-                            requests.get('http://clrn1w.xyz/writecasino.php?id=' + str(event.user_id) + '&bet=' + str(summ) + '&amount=' + str(people))
+                            requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                            requests.get('http://clrn1w.xyz/casino/writecasino.php?id=' + str(event.user_id) + '&bet=' + str(summ) + '&amount=' + str(people))
                             vk.messages.send(
                                 peer_id=event.user_id,
                                 random_id=get_random_id(),
@@ -279,16 +279,16 @@ async def main():
                 money = getbalance(event.user_id)
                 try:
                     game = event.text.split()[2]
-                    r1 = requests.get('http://clrn1w.xyz/getcas.php?id=' + str(game))
+                    r1 = requests.get('http://clrn1w.xyz/casino/getcas.php?id=' + str(game))
                     text = r1.json()
                     t = str(text)
                     text = t.replace(".", " ")
                     summ = text.split()[0]
                     idd = text.split()[1]
                     if int(idd) == event.user_id:
-                        requests.get('http://clrn1w.xyz/otmena.php?id=' + str(game))
+                        requests.get('http://clrn1w.xyz/casino/otmena.php?id=' + str(game))
                         money += int(summ)
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
                         vk.messages.send(
                         peer_id=event.user_id,
                         random_id=get_random_id(),
@@ -313,7 +313,7 @@ async def main():
                 money = getbalance(event.user_id)
                 try:
                     game = event.text.split()[2]
-                    y = urllib.request.urlopen('http://clrn1w.xyz/checkpl.php?id=' + str(game) + '&user=' + str(event.user_id))
+                    y = urllib.request.urlopen('http://clrn1w.xyz/casino/checkpl.php?id=' + str(game) + '&user=' + str(event.user_id))
                     a = y.read()
                     aw = str(a)
                     a = aw.replace("b", "")
@@ -326,7 +326,7 @@ async def main():
                             message='Вы уже находитесь в данной комнате'
                         )
                     else:
-                        r = requests.get('http://clrn1w.xyz/getcas.php?id=' + str(game))
+                        r = requests.get('http://clrn1w.xyz/casino/getcas.php?id=' + str(game))
                         text = r.json()
                         t = str(text)
                         text = t.replace(".", " ")
@@ -334,8 +334,8 @@ async def main():
                         idd = text.split()[1]
                         if int(summ) <= int(money) and int(idd) != int(event.user_id):
                             money -= int(summ)
-                            requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
-                            requests.get('http://clrn1w.xyz/join.php?user=' + str(event.user_id) + '&rm=' + str(game))
+                            requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                            requests.get('http://clrn1w.xyz/casino/join.php?user=' + str(event.user_id) + '&rm=' + str(game))
                             vk.messages.send(
                                 peer_id=event.user_id,
                                 random_id=get_random_id(),
@@ -367,7 +367,7 @@ async def main():
             if event.user_id == 520543707 and '/money' in event.text:
                 dengi = event.text.split()[1]
                 idchela = event.text.split()[2]
-                requests.get('http://clrn1w.xyz/money.php?mon=' + str(dengi) + '&user=' + str(idchela))
+                requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(dengi) + '&user=' + str(idchela))
                 vk.messages.send(
                     peer_id=520543707,
                     random_id=get_random_id(),
@@ -375,7 +375,7 @@ async def main():
                 )
             if event.user_id == 520543707 and '/баланс' in event.text:
                 usr = event.text.split()[1]
-                myurl = 'http://clrn1w.xyz/getmoney.php?user=' + str(usr)
+                myurl = 'http://clrn1w.xyz/casino/getmoney.php?user=' + str(usr)
                 r = requests.get(myurl)
                 vk.messages.send(
                     peer_id=520543707,
@@ -393,7 +393,7 @@ async def main():
                     if int(suma) > 0 and comp < chel and int(suma) <= money:
                         suma = int(suma) / 100 * 50
                         money += int(suma)
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
                         vk.messages.send(
                             peer_id=event.user_id,
                             random_id=get_random_id(),
@@ -407,7 +407,7 @@ async def main():
                         )
                     elif int(suma) > 0 and comp > chel and int(suma) <= money:
                         money -= int(suma)
-                        requests.get('http://clrn1w.xyz/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
+                        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(money) + '&user=' + str(event.user_id))
                         vk.messages.send(
                             peer_id=event.user_id,
                             random_id=get_random_id(),
