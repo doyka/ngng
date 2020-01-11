@@ -2,12 +2,17 @@ import requests
 import random
 import re
 import os
+import json
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.utils import get_random_id
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 import urllib.request
 import asyncio
+
+qiwi_token = os.environ.get('qiwitoken')
+tok = os.environ.get('bottoken')
+my_login = '380508817311'
 
 def getbalance(arg):
     try:
@@ -22,8 +27,24 @@ def getbalance(arg):
         r = requests.get(myurl)
         return r.json()
 
+
+def check_payment(com):
+    s = requests.Session()
+    s.headers['authorization'] = 'Bearer ' + qiwi_token
+    parameters = {'rows': '1'}
+    h = s.get('https://edge.qiwi.com/payment-history/v1/persons/' + my_login + '/payments', params = parameters)
+    tmp = json.loads(h.text)
+    comment = tmp['data'][0]['comment']
+    sum_qiwi = tmp['data'][0]['sum']['amount']
+    if com == comment:
+        sum_qiwi = sum_qiwi / 50
+        requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(sum_qiwi * 1000000) + '&user=' + str(com))
+        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Счет%20успешно%20пополнен&user_id=&user_id={com}&access_token={tok}}')
+    else:
+        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Транзакции%20не%20было%20найдено&user_id=&user_id={com}&access_token={tok}}')
+
+
 async def main():
-    tok = os.environ.get('bottoken')
     vk_session = vk_api.VkApi(token=tok)
     longpoll = VkLongPoll(vk_session)
     vk = vk_session.get_api()
@@ -59,7 +80,7 @@ async def main():
                 vk.messages.send(
                     peer_id=event.user_id,
                     random_id=get_random_id(),
-                    message='Вы запрашиваете вывод рублями,\nдля этого укажите количество денег для вывода(от 3ĸĸ)\nи номер Qiwi/Webmoney/Yandex.\n1ĸĸ - 30 рублей.\nПример: 2ĸĸ  qiwi +79871545068\nВводите только целые числа!!!'
+                    message='Вы запрашиваете вывод рублями,\nдля этого укажите количество денег для вывода(от 3ĸĸ)\nи номер Qiwi/Webmoney/Yandex.\n1ĸĸ - 40 рублей.\nПример: 2ĸĸ  qiwi +79871545068\nВводите только целые числа!!!'
                 )
                 ss = True
             if 'кк' in event.text and ss:
@@ -104,22 +125,12 @@ async def main():
                     peer_id=event.user_id,
                     random_id=get_random_id(),
                     keyboard=keyboard3.get_keyboard(),
-                    message='Вы собираетесь пополнить счет рублями(от 1ĸĸ), 1ĸĸ - 50 рублей.\nПерейдите по данной ссылке qiwi.com/p/380508817311\nи оплатите нужное для вас количество.\nВ комментарии к переводу укажите своё имя и фамилию.\nПосле оплаты нажмите на кнопку "Оплачено"'
+                    message=f'Вы собираетесь пополнить счет рублями(от 1ĸĸ), 1ĸĸ - 50 рублей.\nПерейдите по данной ссылке qiwi.com/p/380508817311\nи оплатите нужное для вас количество.\nВ комментарии к переводу укажите: {event.user_id}.\nПосле оплаты нажмите на кнопку "Оплачено"'
                 )
                 ss2 = True
             if event.text == 'Оплачено' and ss2:
                 ss2 = False
-                vk.messages.send(
-                    peer_id=event.user_id,
-                    random_id=get_random_id(),
-                    keyboard=keyboard.get_keyboard(),
-                    message='Заказ на пополнение создан. Ожидайте!'
-                )
-                vk.messages.send(
-                    peer_id=520543707,
-                    random_id=get_random_id(),
-                    message='Ввод рублями @id' + str(event.user_id)
-                )
+                check_payment(event.user_id)
             if event.text == 'Вывод виртами' or event.text == 'вывод виртами':
                 money = getbalance(event.user_id)
                 keyboard1 = VkKeyboard(one_time=True)
