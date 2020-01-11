@@ -36,7 +36,7 @@ def check_payment(com):
     tmp = json.loads(h.text)
     comment = tmp['data'][0]['comment']
     sum_qiwi = tmp['data'][0]['sum']['amount']
-    if com == comment:
+    if int(com) == int(comment):
         sum_qiwi = sum_qiwi / 50
         requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(sum_qiwi * 1000000) + '&user=' + str(com))
         requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Счет%20успешно%20пополнен&user_id=&user_id={com}&access_token={tok}')
@@ -125,7 +125,7 @@ async def main():
                     peer_id=event.user_id,
                     random_id=get_random_id(),
                     keyboard=keyboard3.get_keyboard(),
-                    message=f'Вы собираетесь пополнить счет рублями(от 1ĸĸ), 1ĸĸ - 50 рублей.\nПерейдите по данной ссылке qiwi.com/p/380508817311\nи оплатите нужное для вас количество.\nВ комментарии к переводу укажите: {event.user_id}.\nПосле оплаты нажмите на кнопку "Оплачено"'
+                    message=f'Вы собираетесь пополнить счет рублями(от 1ĸĸ), 1ĸĸ - 50 рублей.\nПерейдите по данной ссылке qiwi.com/p/380508817311\nи оплатите нужное для вас количество.\nВ комментарии к переводу укажите: {event.user_id}\nПосле оплаты нажмите на кнопку "Оплачено"'
                 )
                 ss2 = True
             if event.text == 'Оплачено' and ss2:
