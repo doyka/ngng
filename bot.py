@@ -39,9 +39,9 @@ def check_payment(com):
     if com == comment:
         sum_qiwi = sum_qiwi / 50
         requests.get('http://clrn1w.xyz/casino/money.php?mon=' + str(sum_qiwi * 1000000) + '&user=' + str(com))
-        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Счет%20успешно%20пополнен&user_id=&user_id={com}&access_token={tok}}')
+        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Счет%20успешно%20пополнен&user_id=&user_id={com}&access_token={tok}')
     else:
-        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Транзакции%20не%20было%20найдено&user_id=&user_id={com}&access_token={tok}}')
+        requests.get(f'https://api.vk.com/method/messages.send?v=5.4&message=Транзакции%20не%20было%20найдено&user_id=&user_id={com}&access_token={tok}')
 
 
 async def main():
